@@ -9,6 +9,7 @@ import DetalleProducto from "./pages/DetalleProducto.jsx";
 import Login from "./pages/Login.jsx";
 import Registro from "./pages/Registro.jsx";
 
+
 export default function App() {
   return (
     <div className="min-h-screen bg-neutral-900 text-white">
