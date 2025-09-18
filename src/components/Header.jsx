@@ -56,6 +56,7 @@ export default function Header() {
           <ul className="max-w-6xl mx-auto py-2 space-y-1 list-none pl-0">
             <li><NavLink to="/" className={item} onClick={() => setOpen(false)}>Inicio</NavLink></li>
             <li><NavLink to="/productos" className={item} onClick={() => setOpen(false)}>Productos</NavLink></li>
+            <li><NavLink to="/nosotros" className={item} onClick={() => setOpen(false)}>Nosotros</NavLink></li>
             <li><NavLink to="/login" className={item} onClick={() => setOpen(false)}>Login</NavLink></li>
             <li><NavLink to="/registro" className={item} onClick={() => setOpen(false)}>Registro</NavLink></li>
           </ul>
