@@ -43,7 +43,7 @@ export default function Header() {
         {/* Menú desktop */}
         <ul className="hidden md:flex gap-1 list-none pl-0">
           <li><NavLink to="/" className={item}>Inicio</NavLink></li>
-          <li><NavLink to="/productos" className={item}>Productos</NavLink></li>
+          <li><NavLink to="/productos" className={item}>Catálogo</NavLink></li>
               <li><NavLink to="/nosotros" className={item}>Nosotros</NavLink></li>
           <li><NavLink to="/login" className={item}>Login</NavLink></li>
           <li><NavLink to="/registro" className={item}>Registro</NavLink></li>
@@ -55,7 +55,7 @@ export default function Header() {
         <div className="md:hidden border-t border-white/10 bg-black/70 backdrop-blur-md">
           <ul className="max-w-6xl mx-auto py-2 space-y-1 list-none pl-0">
             <li><NavLink to="/" className={item} onClick={() => setOpen(false)}>Inicio</NavLink></li>
-            <li><NavLink to="/productos" className={item} onClick={() => setOpen(false)}>Productos</NavLink></li>
+            <li><NavLink to="/productos" className={item} onClick={() => setOpen(false)}>Catálogo</NavLink></li>
             <li><NavLink to="/nosotros" className={item} onClick={() => setOpen(false)}>Nosotros</NavLink></li>
             <li><NavLink to="/login" className={item} onClick={() => setOpen(false)}>Login</NavLink></li>
             <li><NavLink to="/registro" className={item} onClick={() => setOpen(false)}>Registro</NavLink></li>
