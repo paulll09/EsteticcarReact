@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Ubicacion from "../components/Ubicacion.jsx";
 
 export default function Nosotros() {
   // Ajustá estos datos si querés
@@ -178,6 +179,9 @@ export default function Nosotros() {
       </section>
 
       <div className="h-10" />
+
+    <Ubicacion />
+
     </main>
   );
 }

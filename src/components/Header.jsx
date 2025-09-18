@@ -29,22 +29,34 @@ export default function Header() {
           <span className="hidden px-2 sm:inline md:text-white">Automotores</span>
         </Link>
 
-        {/* Botón hamburguesa (solo mobile) */}
+        {/* Botón hamburguesa animado (solo mobile) */}
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded border border-white/20 text-white"
-          aria-label="Abrir menú"
+          onClick={() => setOpen(v => !v)}
+          className="md:hidden inline-flex flex-col items-center justify-center w-10 h-10 rounded border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
+          aria-controls="mobile-menu"
         >
-          {open ? "✕" : "☰"}
+          {/* líneas */}
+          <span
+            className={`block h-0.5 w-6 bg-white transition-transform duration-300 ${open ? "translate-y-1.5 rotate-45" : ""
+              }`}
+          />
+          <span
+            className={`block h-0.5 w-6 bg-white my-1 transition-opacity duration-200 ${open ? "opacity-0" : "opacity-100"
+              }`}
+          />
+          <span
+            className={`block h-0.5 w-6 bg-white transition-transform duration-300 ${open ? "-translate-y-1.5 -rotate-45" : ""
+              }`}
+          />
         </button>
-
         {/* Menú desktop */}
         <ul className="hidden md:flex gap-1 list-none pl-0">
           <li><NavLink to="/" className={item}>Inicio</NavLink></li>
           <li><NavLink to="/productos" className={item}>Catálogo</NavLink></li>
-              <li><NavLink to="/nosotros" className={item}>Nosotros</NavLink></li>
+          <li><NavLink to="/nosotros" className={item}>Nosotros</NavLink></li>
           <li><NavLink to="/login" className={item}>Login</NavLink></li>
           <li><NavLink to="/registro" className={item}>Registro</NavLink></li>
         </ul>

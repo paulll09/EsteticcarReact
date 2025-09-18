@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import productos from "../data/products.js";
 import { formatARS } from "../utils/format.js";
+import Ubicacion from "../components/Ubicacion.jsx";
 
 
 export default function DetalleProducto() {
@@ -94,6 +95,7 @@ export default function DetalleProducto() {
           </div>
         </div>
       </div>
+      <Ubicacion />
     </main>
   );
 }
