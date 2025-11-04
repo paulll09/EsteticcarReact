@@ -1,70 +1,87 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import ProductCard from "./ProductCard.jsx";
+import { listAutos } from "../api";
 
-export default function Destacados({
-  items = [],
-  title = "Destacados",
-  subtitle = "Modelos seleccionados y listos para entrega inmediata.",
-  ctaHref = "/productos",
-  ctaText = "Ver todos",
-}) {
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "./destacados.css"; // 👈 estilos actualizados aquí
+
+export default function Destacados({ items: external }) {
+  const [items, setItems] = useState(external || []);
+  const [loading, setLoading] = useState(!external);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    if (external) return;
+    (async () => {
+      try {
+        setLoading(true);
+        const data = await listAutos({
+          destacado: 1,
+          page: 1,
+          limit: 30,
+          sort: "created_at desc",
+        });
+        setItems(Array.isArray(data?.items) ? data.items : []);
+      } catch {
+        setErr("No se pudieron cargar los destacados");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [external]);
+
+  if (loading)
+    return (
+      <section className="max-w-6xl mx-auto p-6">
+        <p className="text-neutral-400">Cargando…</p>
+      </section>
+    );
+  if (err)
+    return (
+      <section className="max-w-6xl mx-auto p-6">
+        <p className="text-rose-400">{err}</p>
+      </section>
+    );
+  if (items.length === 0) return null;
+
+  const loop = items.length > 1;
+
   return (
-    <section className="relative">
-      {/* Fondo sutil con gradiente */}
-      <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 to-black-100 pointer-events-none" />
-
-      <div className="relative max-w-6xl mx-auto px-6 py-12">
-        {/* Encabezado */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-          <div className="animate-fade-in">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wide text-red-400 bg-red-500/10 px-2 py-1 rounded">
-              Selección de la semana
-            </span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-extrabold text-white">
-              {title}
-            </h2>
-            {subtitle && <p className="mt-2 text-neutral-400">{subtitle}</p>}
-          </div>
-
-        </div>
-
-        {/* Grid */}
-        {items.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((p, idx) => (
-              <div
-                key={p.id}
-                className={`hover-lift animate-scale-in ${
-                  idx % 3 === 1 ? "animate-delay-100" : idx % 3 === 2 ? "animate-delay-200" : ""
-                }`}
-              >
-                <div className="hover-zoom-img">
-                  <ProductCard producto={p} />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-neutral-400 mt-6 animate-fade-in">
-            No hay productos destacados por el momento.
-          </p>
-        )}
-
-        {/* CTA inferior opcional */}
-        {ctaHref && (
-          <div className="text-center mt-10">
-            <Link
-              to={ctaHref}
-              className="inline-flex items-center gap-2 text-white/90 hover:text-white transition"
-            >
-              Ver el catálogo completo
-              <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-                <path fill="currentColor" d="M10 17l5-5-5-5v10z" />
-              </svg>
-            </Link>
-          </div>
-        )}
+    <section className="max-w-6xl mx-auto p-6 relative">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-white">
+          Destacados
+        </h2>
       </div>
+
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        slidesPerView={1}
+        spaceBetween={16}
+        loop={loop}
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        navigation
+        pagination={{ clickable: true }}
+        breakpoints={{
+          640: { slidesPerView: 2, spaceBetween: 16 },
+          1024: { slidesPerView: 3, spaceBetween: 18 },
+        }}
+        className="!pb-10 destacados-swiper"
+      >
+        {items.map((p) => (
+          <SwiperSlide key={p.id}>
+            <ProductCard p={p} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 }

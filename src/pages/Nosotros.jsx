@@ -102,7 +102,7 @@ export default function Nosotros() {
                 to="/productos"
                 className="inline-flex items-center justify-center bg-red-600 text-white px-4 py-2 rounded btn-primary-glow"
               >
-                Ver catálogo
+                Ver vehículos
               </Link>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function Nosotros() {
           {[
             { n: "+200", t: "Clientes felices" },
             { n: "+100", t: "Unidades en stock" },
-            { n: "200+", t: "Puntos de control por unidad" },
+            { n: "+100", t: "Puntos de control por unidad" },
           ].map((s, i) => (
             <div key={s.t} className={`panel-soft p-6 animate-fade-in-up ${i === 1 ? "animate-delay-200" : i === 2 ? "animate-delay-400" : ""}`}>
               <div className="text-3xl font-extrabold text-white">{s.n}</div>

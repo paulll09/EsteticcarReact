@@ -1,1 +1,317 @@
 @import "tailwindcss";
+
+/* ====== Animaciones base ====== */
+@keyframes fade-in {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-14px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96) }
+  to   { opacity: 1; transform: scale(1) }
+}
+/* Pan/zoom suave tipo Ken Burns para la imagen del hero */
+@keyframes kenburns {
+  0%   { transform: scale(1) translateZ(0) }
+  100% { transform: scale(1.08) translateZ(0) }
+}
+/* Reveal por “cortina” (clip-path) para títulos */
+@keyframes clip-reveal {
+  0%   { clip-path: inset(0 100% 0 0) }
+  100% { clip-path: inset(0 0 0 0) }
+}
+
+/* ====== Utilidades ====== */
+.animate-fade-in      { animation: fade-in .7s ease-out both }
+.animate-fade-in-up   { animation: fade-in-up .8s ease-out both }
+.animate-fade-in-down { animation: fade-in-down .8s ease-out both }
+.animate-scale-in     { animation: scale-in .6s ease-out both }
+.animate-kenburns     { animation: kenburns 16s ease-in-out both }
+.animate-clip-reveal  { animation: clip-reveal 900ms cubic-bezier(.2,.7,0,1) both }
+
+/* Delays rápidas en utilidades */
+.animate-delay-100 { animation-delay: .1s }
+.animate-delay-200 { animation-delay: .2s }
+.animate-delay-300 { animation-delay: .3s }
+.animate-delay-400 { animation-delay: .4s }
+.animate-delay-600 { animation-delay: .6s }
+
+
+/* ========= REVEAL ON SCROLL ========= */
+.a-hidden {
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+}
+.a-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity .6s ease-out var(--d, 0ms),
+    transform .6s ease-out var(--d, 0ms);
+}
+
+/* Subrayado que se “despliega” debajo del h2 */
+.underline-anim {
+  animation: underlineGrow .7s ease-out forwards;
+  animation-delay: .25s;
+}
+@keyframes underlineGrow {
+  from { width: 0 }
+  to   { width: 120px }
+}
+
+/* ========= HOVER CARDS ========= */
+.card {
+  background: transparent;
+  border-radius: 22px;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  padding: 6px; /* micro padding para el glow */
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.015));
+}
+
+/* ========= ZOOM SUAVE EN LA IMAGEN ========= */
+.img-wrap {
+  border-radius: 28px;
+  overflow: hidden;
+}
+.img-zoom {
+  will-change: transform, filter;
+  transition: transform .45s ease, filter .35s ease;
+}
+.img-wrap:hover .img-zoom {
+  transform: scale(1.06);
+  filter: saturate(1.05);
+}
+
+/* ====== Financiación (detalle producto) ====== */
+
+/* Tarjeta con leve gradiente y borde */
+.financing-card {
+  border: 1px solid rgba(239, 68, 68, 0.4); /* red-500/40 */
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0.6), rgba(23, 23, 23, 0.3));
+  border-radius: 12px;
+}
+
+/* ---------- Hero: Ken Burns suave ---------- */
+@keyframes hero-kenburns {
+  0%   { transform: scale(1.05) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.12) translate3d(1.5%, -1.5%, 0); }
+  100% { transform: scale(1.05) translate3d(0, 0, 0); }
+}
+.animate-hero-kenburns {
+  animation: hero-kenburns 22s ease-in-out infinite;
+}
+@media (min-width: 768px) {
+  .animate-hero-kenburns { animation-duration: 18s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-kenburns { animation: none !important; }
+}
+
+/* ---------- Textos legibles sin fondo/gradiente ---------- */
+.text-glow-hero {
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.45),
+    0 0 22px rgba(0,0,0,.35);
+}
+.text-glow-hero-sub {
+  text-shadow: 0 1px 6px rgba(0,0,0,.35);
+}
+
+/* ---------- Botón con glow ---------- */
+.btn-primary-glow {
+  box-shadow:
+    0 10px 20px rgba(220, 38, 38, .25),
+    0 0 0 1px rgba(255,255,255,.06) inset;
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn-primary-glow:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 26px rgba(220, 38, 38, .32),
+    0 0 0 1px rgba(255,255,255,.08) inset;
+  filter: brightness(1.05);
+}
+
+/* ---------- Animaciones de entrada (stagger) ---------- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) }
+}
+.hero-reveal {
+  opacity: 0;
+  animation: fade-up .7s ease-out forwards;
+}
+.delay-150 { animation-delay: .15s; }
+.delay-300 { animation-delay: .30s; }
+
+/* Accesibilidad: si el usuario reduce movimiento, no animamos */
+@media (prefers-reduced-motion: reduce) {
+  .hero-reveal { animation: none !important; opacity: 1 !important; }
+}
+
+
+/* Subtítulo con ícono alineado */
+.financing-title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+
+/* Lista de bullets */
+.financing-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* ===========================
+   MARCAS — Carrusel pro
+   =========================== */
+:root {
+  --marquee-duration: 22s;
+}
+@media (max-width: 640px) {
+  :root { --marquee-duration: 18s; }
+}
+
+.marquee { position: relative; overflow: hidden; }
+.marquee .marquee-inner {
+  display: inline-flex;
+  white-space: nowrap;
+  gap: 0.75rem;
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-inner,
+.marquee:active .marquee-inner {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.mask-gradient {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+}
+
+@keyframes brand-bob {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-3px) }
+}
+
+.marquee img {
+  transition: transform .2s ease, filter .2s ease;
+  filter: brightness(1.15) contrast(1.15);
+}
+.marquee img:hover {
+  transform: scale(1.08);
+  filter: brightness(1.35) contrast(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee .marquee-inner,
+  [style*="brand-bob"] {
+    animation: none !important;
+  }
+}
+
+/* ---------- Hero: Ken Burns suave ---------- */
+@keyframes hero-kenburns {
+  0%   { transform: scale(1.05) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.12) translate3d(1.5%, -1.5%, 0); }
+  100% { transform: scale(1.05) translate3d(0, 0, 0); }
+}
+.animate-hero-kenburns {
+  animation: hero-kenburns 22s ease-in-out infinite;
+}
+@media (min-width: 768px) {
+  .animate-hero-kenburns { animation-duration: 18s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-kenburns { animation: none !important; }
+}
+
+/* ---------- Textos legibles sobre fondos claros ---------- */
+.text-glow-hero {
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.45),
+    0 0 22px rgba(0,0,0,.35);
+}
+.text-glow-hero-sub {
+  text-shadow:
+    0 1px 6px rgba(0,0,0,.35);
+}
+
+/* ---------- Botón con glow sutil ---------- */
+.btn-primary-glow {
+  box-shadow:
+    0 10px 20px rgba(220, 38, 38, .25),
+    0 0 0 1px rgba(255,255,255,.06) inset;
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn-primary-glow:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 26px rgba(220, 38, 38, .32),
+    0 0 0 1px rgba(255,255,255,.08) inset;
+  filter: brightness(1.05);
+}
+
+/* ===== Transiciones entre páginas ===== */
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translate3d(0, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Opcional: entrar con leve desplazamiento hacia arriba */
+@keyframes page-slide-up {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Clase que aplicamos al contenedor de cada pantalla */
+.page-animate {
+  animation: page-fade-in .45s ease-out both;
+  /* Si querés slide en vez de fade:
+     animation: page-slide-up .45s ease-out both; */
+}
+
+/* Accesibilidad: si el usuario prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .page-animate { animation: none !important; }
+}
+
+/* Bloquea cualquier desborde horizontal global */
+html, body, #root {
+  overflow-x: hidden;
+}
+
+/* Previene sumas raras de paddings/márgenes que empujen el layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Botón flotante: pequeña animación al aparecer */
+@keyframes backtotop-pop {
+  from { transform: scale(.8); opacity: 0 }
+  to   { transform: scale(1); opacity: 1 }
+}
+.backtotop-pop { animation: backtotop-pop .18s ease-out both; }

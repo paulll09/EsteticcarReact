@@ -1,0 +1,46 @@
+.destacados-swiper {
+  --swiper-navigation-size: 28px; /* tamaño de íconos */
+  --swiper-navigation-color: #ffffff; /* flechas blancas */
+  --swiper-pagination-color: #ef4444; /* rojo activo */
+}
+
+/* Flechas más limpias */
+.destacados-swiper .swiper-button-prev,
+.destacados-swiper .swiper-button-next {
+  color: #ffffff;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.destacados-swiper .swiper-button-prev:hover,
+.destacados-swiper .swiper-button-next:hover {
+  color: #ef4444; /* rojo en hover */
+  transform: scale(1.1);
+}
+
+/* Flechas centradas verticalmente */
+.destacados-swiper .swiper-button-prev,
+.destacados-swiper .swiper-button-next {
+  top: 45%;
+}
+
+/* Quitamos cualquier fondo o borde del Swiper */
+.destacados-swiper .swiper-button-prev::after,
+.destacados-swiper .swiper-button-next::after {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Bullets (paginación) */
+.destacados-swiper .swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 0.3);
+  width: 8px;
+  height: 8px;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.destacados-swiper .swiper-pagination-bullet-active {
+  background-color: #ef4444;
+  width: 20px;
+  border-radius: 8px;
+}

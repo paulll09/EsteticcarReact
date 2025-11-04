@@ -7,10 +7,18 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+#dependencias
 node_modules
+
+#variables privadas
+.env
+.env.local
+.env.production 
 dist
+
 dist-ssr
 *.local
+
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +30,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#archivos innesarios
+public/img/Postman-win64-setup.exe
