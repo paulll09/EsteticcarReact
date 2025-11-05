@@ -86,9 +86,24 @@ export async function updateAuto(id, payload) {
   });
 }
 
+// BORRAR AUTO (usando método simulado)
 export async function deleteAuto(id) {
-  return fetchWithAuth(`${API_URL}/autos/${id}`, { method: "DELETE" });
+  const res = await fetch(`${API_BASE}/api/autos/${id}`, {
+    method: "POST",                           // <- POST en vez de DELETE
+    headers: {
+      "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "DELETE",     // <- override del método
+      Authorization: `Bearer ${getToken()}`,  // tu token JWT
+    },
+    body: JSON.stringify({ _method: "DELETE" }) // <- doble seguro (CI también lee _method)
+  });
+  if (!res.ok) {
+    const t = await safeJson(res);
+    throw new Error(t?.error || `Error ${res.status} al eliminar`);
+  }
+  return res.json();
 }
+
 
 export async function deleteImagen(autoId, imagenId) {
   return fetchWithAuth(`${API_URL}/autos/${autoId}/imagenes/${imagenId}`, { method: "DELETE" });
