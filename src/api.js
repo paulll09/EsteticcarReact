@@ -1,36 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL;
+// src/api.js
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, ""); // sin barra final
 
-// === TOKEN STORAGE ===
-export function getToken() {                            // 👈 exportado
-  return sessionStorage.getItem("JWT_TOKEN") || "";
-}
-function setToken(token, exp) {
-  sessionStorage.setItem("JWT_TOKEN", token);
-  if (exp) sessionStorage.setItem("JWT_EXP", String(exp));
-}
-export function clearToken() {                          // 👈 exportado
-  sessionStorage.removeItem("JWT_TOKEN");
-  sessionStorage.removeItem("JWT_EXP");
-}
+// === TOKEN STORAGE === (igual que ya tenés)
 
-// === HELPERS ===
-async function parseResponse(res) {
-  let data = null, text = null;
-  try { data = await res.clone().json(); } catch { }
-  if (!res.ok) {
-    try { text = await res.text(); } catch { }
-    const rawErr = (data && (data.error ?? data.message)) ?? data;
-    let msg = null;
-    if (typeof rawErr === "string") msg = rawErr;
-    else if (rawErr && typeof rawErr === "object") {
-      if (rawErr.message && typeof rawErr.message === "string") msg = rawErr.message;
-      else msg = JSON.stringify(rawErr, null, 2);
-    } else if (text) msg = text.slice(0, 600);
-    else msg = `HTTP ${res.status}`;
-    throw new Error(msg);
-  }
-  return data;
-}
+// === HELPERS === (igual que ya tenés)
 
 // === AUTH ===
 export async function login(user, pass) {
@@ -39,8 +12,7 @@ export async function login(user, pass) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ user, pass }),
   });
-  const d = await parseResponse(r); // { ok, token, exp }
-  if (!d?.ok || !d?.token) throw new Error("Login falló");
+  const d = await parseResponse(r);
   setToken(d.token, d.exp);
   return true;
 }
@@ -85,10 +57,10 @@ export async function listAutos({ q, destacado, marca, page = 1, limit = 12, sor
   const r = await fetch(`${API_URL}/autos?${p.toString()}`);
   return parseResponse(r);
 }
+
 export async function getAuto(id) {
-  const r = await fetch(`${import.meta.env.VITE_API_URL}/autos/${id}`);
-  if (!r.ok) throw new Error("Error");
-  return r.json();
+  const r = await fetch(`${API_URL}/autos/${id}`);
+  return parseResponse(r);
 }
 
 // === ADMIN (JWT) ===
@@ -123,16 +95,11 @@ export async function deleteImagen(autoId, imagenId) {
 }
 
 export async function setPortada(autoId, url) {
-  const res = await fetch(`${API_URL}/autos/${autoId}/portada`, {
+  return fetchWithAuth(`${API_URL}/autos/${autoId}/portada`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getToken()}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url }),
   });
-  if (!res.ok) throw new Error("Error actualizando portada");
-  return res.json();
 }
 
 export async function reorderImages(ids) {
@@ -142,4 +109,3 @@ export async function reorderImages(ids) {
     body: JSON.stringify({ ids }),
   });
 }
-
