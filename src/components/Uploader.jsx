@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { uploadImage, reorderImages, setPortada } from "../api";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import { setPortada } from "../api";
+
 
 export default function Uploader({ autoId, images = [], onUploaded, onChanged }) {
   const [files, setFiles] = useState(images);
@@ -41,57 +42,39 @@ export default function Uploader({ autoId, images = [], onUploaded, onChanged })
   }
 
 
-  return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap gap-3">
-        {files.map((img, i) => (
-          <div
-            key={i}
-            className="relative group cursor-grab"
-            draggable
-            onDragStart={(e) => e.dataTransfer.setData("index", i)}
-            onDrop={(e) => {
-              const from = Number(e.dataTransfer.getData("index"));
-              const to = i;
-              const arr = [...files];
-              const [moved] = arr.splice(from, 1);
-              arr.splice(to, 0, moved);
-              setFiles(arr);
-              onChanged && onChanged(arr);
-            }}
-            onDragOver={(e) => e.preventDefault()}
-          >
-            <img
-              src={img.url}
-              alt="auto"
-              className="w-28 h-28 object-cover rounded border border-white/10"
-            />
-            <button
-              type="button"
-              onClick={() => handleSetPortada(img.url)}
-              className="absolute bottom-1 left-1 bg-black/60 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
-              title="Definir como portada"
-            >
-              Portada
-            </button>
-          </div>
-        ))}
-      </div>
-      <div className="flex gap-2 items-center">
-        <input type="file" onChange={handleUpload} accept="image/*" />
-        <button
-          type="button"
-          onClick={() => handleSetPortada(img.url)}
-          className={`absolute bottom-1 left-1 text-xs px-2 py-1 rounded transition ${img.isPortada
-              ? "bg-green-600 text-white"
-              : "bg-black/60 text-white hover:bg-black/80"
-            }`}
-          title="Definir como portada"
-        >
-          {img.isPortada ? "Portada ✅" : "Hacer portada"}
-        </button>
 
-      </div>
+  return (
+  <div className="space-y-2">
+    <div className="flex flex-wrap gap-2">
+      {files.map((img) => (
+        <div key={img.id || img.url} className="relative group">
+          <img
+            src={img.url}
+            alt=""
+            draggable="false"
+            className="w-28 h-20 object-cover rounded block"
+          />
+          <button
+            type="button"
+            onClick={() => handleSetPortada(img.url)}
+            className={`absolute bottom-1 left-1 text-xs px-2 py-1 rounded transition ${
+              img.isPortada
+                ? "bg-green-600 text-white"
+                : "bg-black/60 text-white hover:bg-black/80"
+            }`}
+            title="Definir como portada"
+          >
+            {img.isPortada ? "Portada ✅" : "Hacer portada"}
+          </button>
+        </div>
+      ))}
     </div>
-  );
-}
+
+    {/* Subida de nuevas imágenes */}
+    <div className="flex gap-2 items-center">
+      <input type="file" onChange={handleUpload} accept="image/*" />
+      {/* Si querés, podés agregar un texto de ayuda acá */}
+      {/* <span className="text-sm text-slate-400">PNG/JPG hasta 5MB</span> */}
+    </div>
+  </div>
+)};
