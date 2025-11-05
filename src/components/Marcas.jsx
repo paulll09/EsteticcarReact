@@ -6,7 +6,7 @@ const BRANDS = [
   { name: "Chevrolet",   slug: "Chevrolet",   logo: "/img/brands/Chevrolet.svg" },
   { name: "Volkswagen",  slug: "Volkswagen",  logo: "/img/brands/volkswagen.svg" },
   { name: "Ford",        slug: "Ford",        logo: "/img/brands/Ford.svg" },
-  { name: "Renault",     slug: "Renault",     logo: "/img/brands/renault.png" },
+  { name: "Renault",     slug: "Renault",     logo: "/img/brands/renault3.png" },
   { name: "Fiat",        slug: "Fiat",        logo: "/img/brands/fiat.png" },
   { name: "Nissan",      slug: "Nissan",      logo: "/img/brands/nissan.png" },
 ];

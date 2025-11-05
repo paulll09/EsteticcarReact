@@ -146,12 +146,25 @@ export async function deleteImagen(autoId, imagenId) {
 }
 
 export async function setPortada(autoId, url) {
-  return fetchWithAuth(`${API_URL}/autos/${autoId}/portada`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+  const res = await fetch(`${API_URL}/autos/${autoId}/portada`, {
+    method: "POST", // 👈 Hostinger bloquea PUT
+    headers: {
+      "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "PUT", // spoof
+      Authorization: `Bearer ${getToken()}`,
+    },
     body: JSON.stringify({ url }),
+    credentials: "include",
   });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Error al definir portada: ${res.status} - ${txt}`);
+  }
+
+  return res.json();
 }
+
 
 export async function reorderImages(ids) {
   return fetchWithAuth(`${API_URL}/imagenes/reorder`, {

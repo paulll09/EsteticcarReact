@@ -25,15 +25,21 @@ export default function Uploader({ autoId, images = [], onUploaded, onChanged })
 
   async function handleSetPortada(url) {
     if (!autoId) return toast.error("Guardá el auto primero");
-    await setPortada(autoId, url);
-    setFiles((arr) =>
-      arr.map((img) => ({
-        ...img,
-        isPortada: img.url === url,
-      }))
-    );
-    toast.success("Portada actualizada");
+    try {
+      await setPortada(autoId, url);
+      setFiles((arr) =>
+        arr.map((img) => ({
+          ...img,
+          isPortada: img.url === url,
+        }))
+      );
+      toast.success("Portada actualizada correctamente");
+    } catch (err) {
+      console.error(err);
+      toast.error("Error al actualizar la portada");
+    }
   }
+
 
   return (
     <div className="space-y-2">
@@ -75,11 +81,16 @@ export default function Uploader({ autoId, images = [], onUploaded, onChanged })
         <input type="file" onChange={handleUpload} accept="image/*" />
         <button
           type="button"
-          onClick={handleReorder}
-          className="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1 rounded"
+          onClick={() => handleSetPortada(img.url)}
+          className={`absolute bottom-1 left-1 text-xs px-2 py-1 rounded transition ${img.isPortada
+              ? "bg-green-600 text-white"
+              : "bg-black/60 text-white hover:bg-black/80"
+            }`}
+          title="Definir como portada"
         >
-          Guardar orden
+          {img.isPortada ? "Portada ✅" : "Hacer portada"}
         </button>
+
       </div>
     </div>
   );

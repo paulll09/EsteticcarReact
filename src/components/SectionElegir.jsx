@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 export default function SectionElegir() {
   const items = [
     {
-      img: "/img/variedad.webp",
+      img: "/img/ampliostock.jpg",
       title: "Amplio stock permanente",
       text: (
         <>
@@ -13,7 +13,7 @@ export default function SectionElegir() {
       ),
     },
     {
-      img: "/img/seleccionados.webp",
+      img: "/img/service.jpg",
       title: "Vehículos seleccionados",
       text: (
         <>

@@ -6,7 +6,7 @@ import { getAuto } from "../api";
 import { cld } from "../utils/cld.js";
 
 const AGENCY_WHATSAPP = "543716400743";          //  ← poné el nro real con código país
-const AGENCY_EMAIL   = "contacto@esteticcar.com"; //  ← poné el email real
+const AGENCY_EMAIL = "contacto@esteticcar.com"; //  ← poné el email real
 
 // ------- Modal reutilizable (NO TOCAR) -------
 function Modal({ open, onClose, title, children }) {
@@ -44,8 +44,8 @@ function FinancingReminder() {
   const Bullet = ({ children }) => (
     <li className="flex items-start gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-           fill="currentColor" className="mt-0.5 h-5 w-5 text-red-500 shrink-0">
-        <path d="M9 16.17 5.12 12.3a1 1 0 0 0-1.41 1.41l4.59 4.59a1 1 0 0 0 1.41 0l10-10a1 1 0 1 0-1.41-1.41L9 16.17z"/>
+        fill="currentColor" className="mt-0.5 h-5 w-5 text-red-500 shrink-0">
+        <path d="M9 16.17 5.12 12.3a1 1 0 0 0-1.41 1.41l4.59 4.59a1 1 0 0 0 1.41 0l10-10a1 1 0 1 0-1.41-1.41L9 16.17z" />
       </svg>
       <span className="text-sm text-neutral-200">{children}</span>
     </li>
@@ -134,7 +134,6 @@ export default function DetalleProducto() {
   const select = (i) => setIdx(i);
 
   const rows = useMemo(() => [
-    ["Código", auto?.codigo],
     ["Marca", auto?.marca],
     ["Modelo", auto?.modelo],
     ["Año", auto?.anio],
@@ -151,7 +150,7 @@ export default function DetalleProducto() {
     const pageUrl = typeof window !== "undefined" ? window.location.href : "";
     const precio = auto?.precio != null ? formatARS(Number(auto.precio)) : "—";
     return (
-`Hola, quiero consultar por este auto:
+      `Hola, quiero consultar por este auto:
 • ${auto?.nombre ?? "—"} (cód: ${auto?.codigo ?? "—"})
 • Precio: ${precio}
 • Link: ${pageUrl}
@@ -219,11 +218,11 @@ ${consulta || "(escribí tu consulta aquí)"}`
 
   // ========= Metadatos dinámicos =========
   const metaTitle = auto ? `${auto.nombre} | Esteticcar Automotores` : "Esteticcar Automotores";
-  const metaDesc  = auto
+  const metaDesc = auto
     ? `Consultá por ${auto.nombre} (${auto.marca} ${auto.modelo}, ${auto.anio}) — Precio ${auto.precio != null ? formatARS(Number(auto.precio)) : "—"}. Vehículo seleccionado y verificado por Esteticcar.`
     : "Concesionaria de autos seleccionados y verificados en Corrientes.";
-  const metaImg   = images.length ? images[0] : "/img/bannerfinal.png";
-  const metaUrl   = typeof window !== "undefined" ? window.location.href : "";
+  const metaImg = images.length ? images[0] : "/img/bannerfinal.png";
+  const metaUrl = typeof window !== "undefined" ? window.location.href : "";
 
   if (loading) {
     return (
@@ -387,8 +386,9 @@ ${consulta || "(escribí tu consulta aquí)"}`
           <div className="rounded-lg border border-white/10 p-3 bg-neutral-800/40">
             <div className="text-sm text-neutral-300">Consultando por:</div>
             <div className="text-base font-semibold">
-              {auto?.nombre} <span className="text-neutral-400">({auto?.codigo})</span>
+              {auto?.nombre}
             </div>
+
             <div className="text-sm text-neutral-300">
               Precio: {auto?.precio != null ? formatARS(Number(auto.precio)) : "—"}
             </div>
@@ -399,9 +399,8 @@ ${consulta || "(escribí tu consulta aquí)"}`
             <div>
               <input
                 placeholder="Tu nombre *"
-                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${
-                  errors.nombre ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
-                }`}
+                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${errors.nombre ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
+                  }`}
                 value={nombre}
                 onChange={(e) => {
                   setNombre(e.target.value);
@@ -415,9 +414,8 @@ ${consulta || "(escribí tu consulta aquí)"}`
               <input
                 placeholder="Tu email *"
                 type="email"
-                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${
-                  errors.email ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
-                }`}
+                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${errors.email ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
+                  }`}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -430,9 +428,8 @@ ${consulta || "(escribí tu consulta aquí)"}`
             <div className="md:col-span-2">
               <input
                 placeholder="Tu teléfono *"
-                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${
-                  errors.telefono ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
-                }`}
+                className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${errors.telefono ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
+                  }`}
                 value={telefono}
                 onChange={(e) => {
                   setTelefono(e.target.value);
@@ -447,9 +444,8 @@ ${consulta || "(escribí tu consulta aquí)"}`
             <textarea
               rows={4}
               placeholder="Escribí tu consulta *"
-              className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${
-                errors.consulta ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
-              }`}
+              className={`w-full bg-neutral-900 border rounded px-3 py-2 text-white outline-none focus:ring-2 transition ${errors.consulta ? "border-rose-600 focus:ring-rose-500" : "border-neutral-700 focus:border-red-500 focus:ring-red-500"
+                }`}
               value={consulta}
               onChange={(e) => {
                 setConsulta(e.target.value);
@@ -471,8 +467,8 @@ ${consulta || "(escribí tu consulta aquí)"}`
               aria-disabled={!canSend}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                   fill="currentColor" className="h-5 w-5">
-                <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.38 0 .02 5.36.02 12a11.89 11.89 0 0 0 1.7 6L0 24l6.19-1.62a11.93 11.93 0 0 0 5.81 1.48h.01c6.63 0 12-5.37 12-12a11.93 11.93 0 0 0-3.48-8.38zM12 21.75h-.01a9.74 9.74 0 0 1-4.96-1.36l-.36-.21-3.67.96.98-3.58-.23-.37a9.74 9.74 0 0 1-1.5-5.16C2.25 6.24 6.24 2.25 12 2.25A9.72 9.72 0 0 1 21.75 12c0 5.76-4.99 9.75-9.75 9.75zm5.31-7.27c-.29-.15-1.73-.85-1.99-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.07s-1.22-.45-2.32-1.42c-.86-.76-1.44-1.7-1.61-1.98-.17-.29-.02-.45.13-.6.14-.14.29-.34.43-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.02-.5-.07-.15-.65-1.57-.9-2.15-.24-.58-.49-.5-.65-.5h-.55c-.19 0-.5.07-.76.36s-.99.97-.99 2.37 1.02 2.75 1.16 2.94c.15.19 2.01 3.08 4.88 4.32.68.29 1.21.46 1.63.59.68.22 1.3.19 1.79.12.55-.08 1.73-.7 1.98-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.34z"/>
+                fill="currentColor" className="h-5 w-5">
+                <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.38 0 .02 5.36.02 12a11.89 11.89 0 0 0 1.7 6L0 24l6.19-1.62a11.93 11.93 0 0 0 5.81 1.48h.01c6.63 0 12-5.37 12-12a11.93 11.93 0 0 0-3.48-8.38zM12 21.75h-.01a9.74 9.74 0 0 1-4.96-1.36l-.36-.21-3.67.96.98-3.58-.23-.37a9.74 9.74 0 0 1-1.5-5.16C2.25 6.24 6.24 2.25 12 2.25A9.72 9.72 0 0 1 21.75 12c0 5.76-4.99 9.75-9.75 9.75zm5.31-7.27c-.29-.15-1.73-.85-1.99-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.07s-1.22-.45-2.32-1.42c-.86-.76-1.44-1.7-1.61-1.98-.17-.29-.02-.45.13-.6.14-.14.29-.34.43-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.02-.5-.07-.15-.65-1.57-.9-2.15-.24-.58-.49-.5-.65-.5h-.55c-.19 0-.5.07-.76.36s-.99.97-.99 2.37 1.02 2.75 1.16 2.94c.15.19 2.01 3.08 4.88 4.32.68.29 1.21.46 1.63.59.68.22 1.3.19 1.79.12.55-.08 1.73-.7 1.98-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.34z" />
               </svg>
               WhatsApp
             </a>
@@ -487,10 +483,10 @@ ${consulta || "(escribí tu consulta aquí)"}`
               aria-disabled={!canSend}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                   fill="none" stroke="currentColor" strokeWidth="1.8"
-                   className="h-5 w-5">
-                <rect x="2" y="4" width="20" height="16" rx="2" ry="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <polyline points="22,6 12,13 2,6" strokeLinecap="round" strokeLinejoin="round"/>
+                fill="none" stroke="currentColor" strokeWidth="1.8"
+                className="h-5 w-5">
+                <rect x="2" y="4" width="20" height="16" rx="2" ry="2" strokeLinecap="round" strokeLinejoin="round" />
+                <polyline points="22,6 12,13 2,6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Email
             </a>
@@ -502,10 +498,10 @@ ${consulta || "(escribí tu consulta aquí)"}`
               title="Copiar texto al portapapeles"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor"
-                   className="h-5 w-5">
+                viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor"
+                className="h-5 w-5">
                 <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M8 16h8m-8-4h8m-8-4h4m7-3H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+                  d="M8 16h8m-8-4h8m-8-4h4m7-3H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
               </svg>
               Copiar mensaje
             </button>

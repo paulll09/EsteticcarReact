@@ -21,10 +21,7 @@ export default function Footer() {
             Nuestro compromiso es ofrecerte vehículos en excelente estado
             y el mejor asesoramiento personalizado.
           </p>
-          <p className="mt-2 text-neutral-500 text-xs">
-            📍 Av. Independencia 1234, Corrientes Capital <br />
-            🕓 Lunes a Sábados 8:00–20:00 hs
-          </p>
+
         </div>
 
         {/* Columna 2: Enlaces útiles */}

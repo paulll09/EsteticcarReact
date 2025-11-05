@@ -84,6 +84,7 @@ export default function Header() {
             <li><NavLink to="/" className={item} onClick={() => setOpen(false)}>Inicio</NavLink></li>
             <li><NavLink to="/productos" className={item} onClick={() => setOpen(false)}>Catálogo</NavLink></li>
             <li><NavLink to="/nosotros" className={item} onClick={() => setOpen(false)}>Nosotros</NavLink></li>
+            <li><NavLink to="/contacto" className={item} onClick={() => setOpen(false)}>Contactanos</NavLink></li>
             {/* ❌ Sin enlace a Admin en mobile */}
           </ul>
         </div>
