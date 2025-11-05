@@ -45,6 +45,7 @@ async function fetchWithAuth(url, options = {}, retry = true) {
 // =============================================
 // PÚBLICO
 
+// ✅ SIN credentials: 'include'
 export async function listAutos({ q, destacado, marca, page = 1, limit = 12, sort = "created_at desc" } = {}) {
   const p = new URLSearchParams();
   if (q) p.set("q", q);
@@ -53,12 +54,17 @@ export async function listAutos({ q, destacado, marca, page = 1, limit = 12, sor
   p.set("page", page);
   p.set("limit", limit);
   p.set("sort", sort);
-  const r = await fetch(`${API_URL}/autos?${p.toString()}`, { credentials: "include" });
+  const r = await fetch(`${API_URL}/autos?${p.toString()}`);
   return parseResponse(r);
 }
 
 export async function getAuto(id) {
-  const r = await fetch(`${API_URL}/autos/${id}`, { credentials: "include" });
+  const r = await fetch(`${API_URL}/autos/${id}`);
+  return parseResponse(r);
+}
+
+export async function getDestacados(limit = 6) {
+  const r = await fetch(`${API_URL}/autos?destacado=1&limit=${encodeURIComponent(limit)}&sort=id desc`);
   return parseResponse(r);
 }
 
