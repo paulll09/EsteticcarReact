@@ -1,30 +1,35 @@
 // src/api.js
-const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, ""); // sin barra final
 
-// === TOKEN STORAGE === (igual que ya tenés)
+// BASE de API: debe ser EXACTAMENTE tu /public/api (sin barra final)
+const API_URL = (import.meta.env?.VITE_API_URL || "https://lightcyan-weasel-722566.hostingersite.com/esteticcar-api/public/api").replace(/\/+$/, "");
 
-// === HELPERS === (igual que ya tenés)
+// =============================================
+// Helpers de token (ajusta si ya los tenés en otro lado)
+const KEY = "jwt";
+const EXP = "jwt_exp";
 
-// === AUTH ===
-export async function login(user, pass) {
-  const r = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user, pass }),
-  });
-  const d = await parseResponse(r);
-  setToken(d.token, d.exp);
-  return true;
+export function setToken(t, expTs) {
+  localStorage.setItem(KEY, t);
+  if (expTs) localStorage.setItem(EXP, String(expTs));
+}
+export function getToken() {
+  return localStorage.getItem(KEY) || "";
+}
+export function clearToken() {
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(EXP);
 }
 
-async function refreshToken() {
-  const r = await fetch(`${API_URL}/auth/refresh`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${getToken()}` },
-  });
-  const d = await parseResponse(r);
-  setToken(d.token, d.exp);
-  return d.token;
+// Parse genérico
+async function parseResponse(res) {
+  const ct = res.headers.get("content-type") || "";
+  const isJson = ct.includes("application/json");
+  const data = isJson ? await res.json() : await res.text();
+  if (!res.ok) {
+    const msg = isJson ? (data?.error || JSON.stringify(data)) : data;
+    throw new Error(msg || `HTTP ${res.status}`);
+  }
+  return data;
 }
 
 async function fetchWithAuth(url, options = {}, retry = true) {
@@ -32,20 +37,14 @@ async function fetchWithAuth(url, options = {}, retry = true) {
     ...(options.headers || {}),
     ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
   };
-  const res = await fetch(url, { ...options, headers });
-  if (res.status === 401 && retry) {
-    try {
-      await refreshToken();
-      return fetchWithAuth(url, options, false);
-    } catch {
-      clearToken();
-      throw new Error("Sesión expirada");
-    }
-  }
+  const res = await fetch(url, { ...options, headers, credentials: "include" });
+  // Si tu API devuelve 401 y tienes refresh, podrías reintentar aquí
   return parseResponse(res);
 }
 
-// === PÚBLICO ===
+// =============================================
+// PÚBLICO
+
 export async function listAutos({ q, destacado, marca, page = 1, limit = 12, sort = "created_at desc" } = {}) {
   const p = new URLSearchParams();
   if (q) p.set("q", q);
@@ -54,16 +53,33 @@ export async function listAutos({ q, destacado, marca, page = 1, limit = 12, sor
   p.set("page", page);
   p.set("limit", limit);
   p.set("sort", sort);
-  const r = await fetch(`${API_URL}/autos?${p.toString()}`);
+  const r = await fetch(`${API_URL}/autos?${p.toString()}`, { credentials: "include" });
   return parseResponse(r);
 }
 
 export async function getAuto(id) {
-  const r = await fetch(`${API_URL}/autos/${id}`);
+  const r = await fetch(`${API_URL}/autos/${id}`, { credentials: "include" });
   return parseResponse(r);
 }
 
-// === ADMIN (JWT) ===
+// =============================================
+// AUTH
+
+export async function login(user, pass) {
+  const r = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user, pass }),
+    credentials: "include",
+  });
+  const d = await parseResponse(r);
+  setToken(d.token, d.exp);
+  return true;
+}
+
+// =============================================
+// ADMIN (JWT)
+
 export async function uploadImage(file) {
   const form = new FormData();
   form.append("file", file);
@@ -86,27 +102,35 @@ export async function updateAuto(id, payload) {
   });
 }
 
-// BORRAR AUTO (usando método simulado)
+// ⛳️ BORRAR AUTO con spoof de método (POST + override).  ESTA ES LA CLAVE EN HOSTINGER.
 export async function deleteAuto(id) {
-  const res = await fetch(`${API_BASE}/api/autos/${id}`, {
-    method: "POST",                           // <- POST en vez de DELETE
+  const res = await fetch(`${API_URL}/autos/${id}`, {
+    method: "POST", // POST en lugar de DELETE
     headers: {
       "Content-Type": "application/json",
-      "X-HTTP-Method-Override": "DELETE",     // <- override del método
-      Authorization: `Bearer ${getToken()}`,  // tu token JWT
+      "X-HTTP-Method-Override": "DELETE", // header de override
+      Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ _method: "DELETE" }) // <- doble seguro (CI también lee _method)
+    body: JSON.stringify({ _method: "DELETE" }), // doble seguro: también via body
+    credentials: "include",
   });
-  if (!res.ok) {
-    const t = await safeJson(res);
-    throw new Error(t?.error || `Error ${res.status} al eliminar`);
-  }
-  return res.json();
+  return parseResponse(res);
 }
 
-
+// Imágenes auxiliares (si las usas)
 export async function deleteImagen(autoId, imagenId) {
-  return fetchWithAuth(`${API_URL}/autos/${autoId}/imagenes/${imagenId}`, { method: "DELETE" });
+  // Para Hostinger, usa spoof también:
+  const res = await fetch(`${API_URL}/autos/${autoId}/imagenes/${imagenId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-HTTP-Method-Override": "DELETE",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ _method: "DELETE" }),
+    credentials: "include",
+  });
+  return parseResponse(res);
 }
 
 export async function setPortada(autoId, url) {
@@ -124,3 +148,6 @@ export async function reorderImages(ids) {
     body: JSON.stringify({ ids }),
   });
 }
+
+// Log de diagnóstico (lo ves en Vercel/producción)
+console.log("[API_URL]", API_URL);
