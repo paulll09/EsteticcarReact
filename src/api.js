@@ -111,16 +111,22 @@ export async function updateAuto(id, payload) {
 // ⛳️ BORRAR AUTO con spoof de método (POST + override).  ESTA ES LA CLAVE EN HOSTINGER.
 export async function deleteAuto(id) {
   const res = await fetch(`${API_URL}/autos/${id}`, {
-    method: "POST", // POST en lugar de DELETE
+    method: "POST", // Hostinger bloquea DELETE
     headers: {
       "Content-Type": "application/json",
-      "X-HTTP-Method-Override": "DELETE", // header de override
+      "X-HTTP-Method-Override": "DELETE", // spoof header
       Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ _method: "DELETE" }), // doble seguro: también via body
+    body: JSON.stringify({ _method: "DELETE" }), // fallback body spoof
     credentials: "include",
   });
-  return parseResponse(res);
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Error al eliminar: ${res.status} - ${txt}`);
+  }
+
+  return res.json();
 }
 
 // Imágenes auxiliares (si las usas)
