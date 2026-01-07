@@ -1,7 +1,7 @@
 // src/api.js
 
 // BASE de API: debe ser EXACTAMENTE tu /public/api (sin barra final)
-const API_URL = (import.meta.env?.VITE_API_URL || "https://lightcyan-weasel-722566.hostingersite.com/esteticcar-api/public/api").replace(/\/+$/, "");
+const API_URL = (import.meta.env?.VITE_API_URL || "https://bisque-cat-715086.hostingersite.com/esteticcar-api/public").replace(/\/+$/, "");
 
 // =============================================
 // Helpers de token (ajusta si ya los tenés en otro lado)
