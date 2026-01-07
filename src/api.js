@@ -147,10 +147,10 @@ export async function deleteImagen(autoId, imagenId) {
 
 export async function setPortada(autoId, url) {
   const res = await fetch(`${API_URL}/autos/${autoId}/portada`, {
-    method: "POST", // 👈 Hostinger bloquea PUT
+    method: "POST", 
     headers: {
       "Content-Type": "application/json",
-      "X-HTTP-Method-Override": "PUT", // spoof
+      "X-HTTP-Method-Override": "PUT", 
       Authorization: `Bearer ${getToken()}`,
     },
     body: JSON.stringify({ url }),
